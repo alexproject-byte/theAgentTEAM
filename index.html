@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏠 Riesenhaus mit Alien-Garage 👽</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🏠 Das brutal große coole Haus <span class="wobble">👽</span></h1>
+    <p class="subtitle">Klick die <b>Garage</b> an — und schau, wer da drin wohnt …</p>
+  </header>
+
+  <!-- Die Szene -->
+  <main class="scene" id="scene">
+    <!-- Himmel mit Wolken und UFO -->
+    <div class="sky">
+      <div class="cloud cloud-a"></div>
+      <div class="cloud cloud-b"></div>
+      <div class="cloud cloud-c"></div>
+      <div class="ufo" id="ufo">
+        <div class="ufo-dome"></div>
+        <div class="ufo-body"></div>
+        <div class="ufo-lights"></div>
+      </div>
+    </div>
+
+    <!-- Das große Haus -->
+    <div class="house">
+      <!-- Spitzes Dach aus Duplo-Steinen -->
+      <div class="roof">
+        <div class="roof-row r1"><span class="brick red"></span></div>
+        <div class="roof-row r2"><span class="brick red"></span><span class="brick yellow"></span><span class="brick red"></span></div>
+        <div class="roof-row r3"><span class="brick red"></span><span class="brick yellow"></span><span class="brick yellow"></span><span class="brick yellow"></span><span class="brick red"></span></div>
+      </div>
+      <div class="flagpole"><div class="flag"></div></div>
+
+      <!-- Etage 3 -->
+      <div class="floor">
+        <span class="brick blue"></span>
+        <span class="brick window"></span>
+        <span class="brick yellow"></span>
+        <span class="brick window"></span>
+        <span class="brick blue"></span>
+      </div>
+      <!-- Etage 2 -->
+      <div class="floor">
+        <span class="brick green"></span>
+        <span class="brick window"></span>
+        <span class="brick red"></span>
+        <span class="brick window"></span>
+        <span class="brick green"></span>
+      </div>
+      <!-- Etage 1 (Erdgeschoss mit Tür) -->
+      <div class="floor">
+        <span class="brick yellow"></span>
+        <span class="brick blue"></span>
+        <span class="brick door"></span>
+        <span class="brick blue"></span>
+        <span class="brick yellow"></span>
+      </div>
+    </div>
+
+    <!-- Die unheimliche Garage -->
+    <div class="garage" id="garage" title="Klick mich!">
+      <div class="garage-roof">
+        <span class="brick green"></span>
+        <span class="brick green"></span>
+        <span class="brick green"></span>
+      </div>
+      <!-- dunkler Innenraum mit grünem Glimmen + Aliens -->
+      <div class="garage-inside">
+        <div class="glow"></div>
+        <div class="alien alien-1" data-alien>
+          <div class="antenna left"></div>
+          <div class="antenna right"></div>
+          <div class="alien-head">
+            <div class="eye"></div>
+            <div class="eye"></div>
+            <div class="mouth"></div>
+          </div>
+        </div>
+        <div class="alien alien-2" data-alien>
+          <div class="antenna left"></div>
+          <div class="antenna right"></div>
+          <div class="alien-head">
+            <div class="eye"></div>
+            <div class="eye"></div>
+            <div class="mouth"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Rolltor -->
+      <div class="garage-door" id="garageDoor">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="garage-label">GARAGE</div>
+    </div>
+
+    <!-- Einfahrt / Straße -->
+    <div class="road">
+      <div class="road-line"></div>
+      <div class="parking-spot" id="parkingSpot"></div>
+    </div>
+
+    <!-- Autos (fahren auf der Straße) -->
+    <div class="car car-red" id="car1">
+      <div class="car-body"></div>
+      <div class="car-roof"></div>
+      <div class="wheel front"></div>
+      <div class="wheel back"></div>
+    </div>
+    <div class="car car-blue" id="car2">
+      <div class="car-body"></div>
+      <div class="car-roof"></div>
+      <div class="wheel front"></div>
+      <div class="wheel back"></div>
+    </div>
+  </main>
+
+  <!-- Knöpfe -->
+  <footer class="controls">
+    <button id="btnCar" class="btn btn-blue">🚗 Auto vorfahren</button>
+    <button id="btnGarage" class="btn btn-green">🚪 Garage auf/zu</button>
+    <button id="btnUfo" class="btn btn-yellow">🛸 UFO rufen</button>
+    <p class="hint" id="hint">Tipp: Du kannst auch direkt auf die Garage oder ein Alien klicken!</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
