@@ -1,0 +1,437 @@
+/* =========================================================
+   Duplo-Look: Farben, Noppen (Studs), Szene, Animationen
+   ========================================================= */
+
+:root {
+  --duplo-red:    #e3000f;
+  --duplo-blue:   #0057b8;
+  --duplo-yellow: #ffcf00;
+  --duplo-green:  #00a651;
+  --duplo-lightblue: #7fd3ff;
+  --stud: 46px;            /* Breite einer 1er-Noppe-Einheit */
+  --brick-h: 42px;         /* Höhe einer Steinreihe */
+  --alien-green: #7CFC00;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  font-family: "Comic Sans MS", "Trebuchet MS", Verdana, sans-serif;
+  background: linear-gradient(#bfeaff 0%, #e6f7ff 55%, #d6f5d0 55%, #cdefc4 100%);
+  color: #1c2b1c;
+  min-height: 100vh;
+}
+
+/* ---------- Kopfzeile ---------- */
+.topbar { text-align: center; padding: 14px 12px 4px; }
+.topbar h1 {
+  margin: 0;
+  font-size: clamp(20px, 4vw, 34px);
+  text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(0,0,0,.15);
+}
+.subtitle { margin: 6px 0 0; font-size: 15px; opacity: .85; }
+
+/* ---------- Szene ---------- */
+.scene {
+  position: relative;
+  max-width: 900px;
+  height: 560px;
+  margin: 10px auto;
+  border-radius: 18px;
+  overflow: hidden;
+  /* grüne Duplo-Bauplatte als Boden + blauer Himmel oben */
+  background:
+    linear-gradient(#aee3ff 0%, #cbefff 45%, #57c04d 45%, #46ab3f 100%);
+  box-shadow: inset 0 0 0 6px rgba(255,255,255,.35), 0 12px 30px rgba(0,0,0,.18);
+}
+
+/* Noppen-Muster auf der grünen Bauplatte (unterer Bereich) */
+.scene::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 55%;
+  background-image: radial-gradient(circle at center,
+      rgba(255,255,255,.28) 0 8px, transparent 9px);
+  background-size: var(--stud) var(--stud);
+  background-position: 4px 4px;
+  pointer-events: none;
+}
+
+/* =========================================================
+   Der Duplo-Stein (Basis-Baustein mit Noppen obendrauf)
+   ========================================================= */
+.brick {
+  display: inline-block;
+  width: var(--stud);
+  height: var(--brick-h);
+  border-radius: 6px;
+  position: relative;
+  margin: 0;
+  vertical-align: bottom;
+  box-shadow:
+    inset -4px -5px 0 rgba(0,0,0,.20),
+    inset 3px 3px 0 rgba(255,255,255,.35);
+}
+/* die runde Noppe oben drauf */
+.brick::before {
+  content: "";
+  position: absolute;
+  top: -7px; left: 50%;
+  transform: translateX(-50%);
+  width: 22px; height: 12px;
+  border-radius: 50%;
+  background: inherit;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.20), inset 2px 2px 0 rgba(255,255,255,.35);
+}
+
+.brick.red    { background: var(--duplo-red); }
+.brick.blue   { background: var(--duplo-blue); }
+.brick.yellow { background: var(--duplo-yellow); }
+.brick.green  { background: var(--duplo-green); }
+
+/* Fenster-Stein */
+.brick.window {
+  background: var(--duplo-lightblue);
+}
+.brick.window::after {
+  content: "";
+  position: absolute;
+  inset: 8px 7px;
+  background:
+    linear-gradient(120deg, #eaffff 0 40%, #bfeeff 40% 100%);
+  border: 3px solid #fff;
+  border-radius: 3px;
+}
+/* Tür-Stein (doppelt hoch) */
+.brick.door {
+  background: #8a4b1f;
+  height: calc(var(--brick-h) * 1.1);
+}
+.brick.door::after {
+  content: "";
+  position: absolute;
+  inset: 6px 8px 0;
+  background: #a05a26;
+  border: 3px solid #6d3813;
+  border-radius: 4px 4px 0 0;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.15);
+}
+
+/* =========================================================
+   Das große Haus
+   ========================================================= */
+.house {
+  position: absolute;
+  left: 60px; bottom: 120px;
+  width: calc(var(--stud) * 5);
+  z-index: 3;
+  filter: drop-shadow(0 8px 6px rgba(0,0,0,.2));
+}
+.floor { display: flex; }
+.floor .brick { border-radius: 4px; }
+
+/* Dach */
+.roof { display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
+.roof-row { display: flex; }
+.roof .brick { border-radius: 8px 8px 4px 4px; }
+
+.flagpole {
+  position: absolute;
+  top: -46px; left: 50%;
+  width: 4px; height: 46px;
+  background: #7a7a7a;
+  transform: translateX(-50%);
+}
+.flag {
+  position: absolute;
+  top: 0; left: 4px;
+  width: 26px; height: 16px;
+  background: var(--duplo-red);
+  transform-origin: left center;
+  animation: wave 2.2s ease-in-out infinite;
+  clip-path: polygon(0 0, 100% 0, 85% 50%, 100% 100%, 0 100%);
+}
+@keyframes wave {
+  0%,100% { transform: rotate(0deg) scaleX(1); }
+  50%     { transform: rotate(-4deg) scaleX(.9); }
+}
+
+/* =========================================================
+   Die unheimliche Garage
+   ========================================================= */
+.garage {
+  position: absolute;
+  left: 320px; bottom: 120px;
+  width: calc(var(--stud) * 3 + 10px);
+  cursor: pointer;
+  z-index: 4;
+  filter: drop-shadow(0 8px 6px rgba(0,0,0,.25));
+}
+.garage-roof { display: flex; }
+.garage-roof .brick { border-radius: 6px 6px 0 0; }
+
+.garage-inside {
+  position: relative;
+  height: calc(var(--brick-h) * 2.4);
+  background:
+    linear-gradient(#0b1d12, #06120b);
+  border-left: 8px solid #2a2a2a;
+  border-right: 8px solid #2a2a2a;
+  overflow: hidden;
+}
+/* grünes Alien-Glimmen */
+.glow {
+  position: absolute;
+  left: 50%; bottom: -20px;
+  width: 160px; height: 160px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(124,252,0,.55) 0%, rgba(124,252,0,0) 70%);
+  animation: pulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes pulse {
+  0%,100% { opacity: .35; transform: translateX(-50%) scale(.9); }
+  50%     { opacity: .8;  transform: translateX(-50%) scale(1.15); }
+}
+
+/* Aliens */
+.alien {
+  position: absolute;
+  bottom: 6px;
+  width: 44px;
+  cursor: pointer;
+  transform: translateY(60px);              /* versteckt, bis Tor auf */
+  transition: transform .5s ease .1s;
+  z-index: 2;
+}
+.alien-1 { left: 14px; }
+.alien-2 { right: 14px; transform: translateY(80px); }
+.garage.open .alien-1 { transform: translateY(6px); animation: peek 2.8s ease-in-out infinite; }
+.garage.open .alien-2 { transform: translateY(16px); animation: peek 2.8s ease-in-out .6s infinite; }
+.alien.duck { transform: translateY(70px) !important; }
+
+@keyframes peek {
+  0%,100% { margin-left: 0; }
+  25%     { margin-left: -5px; }
+  75%     { margin-left: 5px; }
+}
+
+.alien-head {
+  position: relative;
+  width: 44px; height: 38px;
+  margin: 0 auto;
+  background: var(--alien-green);
+  border-radius: 50% 50% 46% 46%;
+  box-shadow: inset -3px -4px 0 rgba(0,0,0,.2), 0 0 12px rgba(124,252,0,.7);
+}
+.eye {
+  position: absolute; top: 12px;
+  width: 12px; height: 15px;
+  background: #04120a;
+  border-radius: 50%;
+  box-shadow: inset 2px -2px 0 #fff;
+  animation: blink 3.5s infinite;
+}
+.alien-head .eye:first-child { left: 6px; }
+.alien-head .eye:nth-child(2) { right: 6px; }
+@keyframes blink {
+  0%,92%,100% { transform: scaleY(1); }
+  95% { transform: scaleY(.1); }
+}
+.mouth {
+  position: absolute;
+  bottom: 6px; left: 50%;
+  width: 16px; height: 5px;
+  transform: translateX(-50%);
+  background: #04120a;
+  border-radius: 0 0 8px 8px;
+}
+.antenna {
+  position: absolute;
+  top: -10px; width: 3px; height: 12px;
+  background: var(--alien-green);
+}
+.antenna::after {
+  content: ""; position: absolute; top: -6px; left: -2px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--alien-green);
+  box-shadow: 0 0 8px var(--alien-green);
+}
+.antenna.left  { left: 10px; transform: rotate(-18deg); }
+.antenna.right { right: 10px; transform: rotate(18deg); }
+
+/* Rolltor */
+.garage-door {
+  position: absolute;
+  left: 8px; right: 8px; bottom: 0;
+  height: calc(var(--brick-h) * 2.4);
+  display: flex; flex-direction: column;
+  transform-origin: top;
+  transition: transform .7s cubic-bezier(.2,.8,.2,1);
+  z-index: 3;
+}
+.garage-door span {
+  flex: 1;
+  background: repeating-linear-gradient(#c9ccd1 0 6px, #aeb2b8 6px 12px);
+  border-bottom: 2px solid #8b8f95;
+}
+.garage.open .garage-door { transform: scaleY(.12); }
+
+.garage-label {
+  position: absolute;
+  bottom: -22px; left: 0; right: 0;
+  text-align: center;
+  font-weight: bold; font-size: 13px;
+  letter-spacing: 2px;
+  color: #14361f;
+}
+
+/* =========================================================
+   Straße / Einfahrt + Parkplatz
+   ========================================================= */
+.road {
+  position: absolute;
+  left: 0; right: 0; bottom: 40px;
+  height: 64px;
+  background: #6b7079;
+  border-top: 5px solid #565a61;
+  border-bottom: 5px solid #565a61;
+  z-index: 2;
+}
+.road-line {
+  position: absolute; top: 50%; left: 0; right: 0;
+  height: 6px; transform: translateY(-50%);
+  background: repeating-linear-gradient(90deg, #ffd23f 0 34px, transparent 34px 70px);
+}
+.parking-spot {
+  position: absolute;
+  left: 330px; top: -6px;
+  width: 90px; height: 74px;
+  border: 4px dashed #ffd23f;
+  border-radius: 6px;
+  opacity: .55;
+}
+
+/* =========================================================
+   Autos (Duplo-Look)
+   ========================================================= */
+.car {
+  position: absolute;
+  bottom: 46px;
+  width: 84px; height: 46px;
+  left: -120px;              /* Start: links außerhalb */
+  z-index: 5;
+  transition: left 2.6s ease-in-out, bottom .6s ease;
+}
+.car-body {
+  position: absolute; bottom: 8px; left: 0;
+  width: 84px; height: 26px;
+  border-radius: 8px 10px 6px 6px;
+}
+.car-roof {
+  position: absolute; bottom: 30px; left: 20px;
+  width: 44px; height: 20px;
+  border-radius: 10px 10px 4px 4px;
+}
+.car-roof::after {
+  content: ""; position: absolute; inset: 5px 6px;
+  background: var(--duplo-lightblue);
+  border-radius: 4px; border: 2px solid #fff;
+}
+.car .wheel {
+  position: absolute; bottom: -2px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #1c1c1c;
+  box-shadow: inset 0 0 0 6px #4a4a4a, inset 0 0 0 9px #1c1c1c;
+}
+.car .wheel.front { right: 6px; }
+.car .wheel.back  { left: 6px; }
+
+.car-red  .car-body, .car-red  .car-roof { background: var(--duplo-red); }
+.car-blue .car-body, .car-blue .car-roof { background: var(--duplo-blue); }
+
+/* =========================================================
+   Himmel: Wolken + UFO
+   ========================================================= */
+.sky { position: absolute; inset: 0; z-index: 1; }
+.cloud {
+  position: absolute;
+  width: 90px; height: 30px;
+  background: #fff;
+  border-radius: 30px;
+  opacity: .9;
+  box-shadow: 24px 6px 0 -4px #fff, -22px 8px 0 -6px #fff;
+  animation: drift 26s linear infinite;
+}
+.cloud-a { top: 30px;  left: -120px; animation-duration: 30s; }
+.cloud-b { top: 70px;  left: -120px; animation-duration: 42s; animation-delay: -12s; transform: scale(.8); }
+.cloud-c { top: 18px;  left: -120px; animation-duration: 36s; animation-delay: -20s; transform: scale(1.1); }
+@keyframes drift { to { left: 1000px; } }
+
+.ufo {
+  position: absolute;
+  top: 40px; left: 55%;
+  width: 90px; height: 40px;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity .5s ease;
+  animation: hover 3.5s ease-in-out infinite;
+}
+.ufo.show { opacity: 1; }
+.ufo-body {
+  position: absolute; bottom: 6px; left: 0;
+  width: 90px; height: 20px;
+  background: linear-gradient(#d7dde3, #9aa2ab);
+  border-radius: 50%;
+}
+.ufo-dome {
+  position: absolute; bottom: 18px; left: 27px;
+  width: 36px; height: 26px;
+  background: radial-gradient(circle at 40% 30%, #d6ffd0, #7CFC00);
+  border-radius: 50% 50% 40% 40%;
+  box-shadow: 0 0 14px rgba(124,252,0,.8);
+}
+.ufo-lights {
+  position: absolute; bottom: 2px; left: 6px;
+  width: 78px; height: 8px;
+  background: repeating-radial-gradient(circle at 8px 4px, #ffe14d 0 4px, transparent 5px 16px);
+}
+@keyframes hover {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50%     { transform: translateY(-12px) rotate(2deg); }
+}
+
+/* =========================================================
+   Knöpfe
+   ========================================================= */
+.controls { text-align: center; padding: 4px 12px 30px; }
+.btn {
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin: 6px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0,0,0,.25), inset 2px 2px 0 rgba(255,255,255,.3);
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+.btn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,.25); }
+.btn-blue   { background: var(--duplo-blue); }
+.btn-green  { background: var(--duplo-green); }
+.btn-yellow { background: var(--duplo-yellow); color: #4a3a00; }
+.hint { margin: 12px 0 0; font-size: 14px; opacity: .8; }
+
+.wobble { display: inline-block; animation: peek 2.8s ease-in-out infinite; }
+
+/* Handy: Szene etwas kleiner */
+@media (max-width: 620px) {
+  .scene { height: 460px; }
+  :root { --stud: 38px; --brick-h: 34px; }
+  .garage { left: 250px; }
+  .parking-spot { left: 260px; }
+}
